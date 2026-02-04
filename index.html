@@ -6,165 +6,191 @@
   <title>EVCars – Configurateur</title>
   <style>
     :root {
-      --bg: #0f1624;
-      --header-bg: #1a2236;
-      --panel-bg: rgba(25, 35, 55, 0.75);
-      --card-bg: rgba(40, 55, 80, 0.6);
+      --bg: #0d1422;
+      --header: #17223a;
+      --sidebar: rgba(20, 30, 50, 0.82);
+      --card: rgba(30, 45, 70, 0.65);
       --accent: #00c8ff;
-      --text: #e5f5ff;
-      --text-dim: #a0c0d0;
-      --border: rgba(0, 200, 255, 0.18);
-      --check: #00ff9d;
+      --accent-dim: #0090bb;
+      --text: #e8f5ff;
+      --text-dim: #a0c8e0;
+      --check: #00ffaa;
+      --border: rgba(0, 200, 255, 0.20);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       min-height: 100vh;
-      overflow-x: hidden;
     }
     header {
-      background: var(--header-bg);
+      background: var(--header);
       border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
+      padding: 0.9rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
     }
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 700;
       color: var(--accent);
-    }
-    .logo::before {
-      content: "EV";
-      color: white;
+      letter-spacing: -0.5px;
     }
     nav {
       display: flex;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
     nav button {
       background: transparent;
       border: none;
       color: var(--text-dim);
-      padding: 0.7rem 1.4rem;
+      padding: 0.6rem 1.3rem;
       border-radius: 6px;
       cursor: pointer;
-      font-weight: 500;
-      transition: all 0.2s;
+      font-size: 0.95rem;
+      transition: 0.2s;
     }
     nav button.active,
     nav button:hover {
-      background: rgba(0,200,255,0.12);
+      background: rgba(0,200,255,0.15);
       color: white;
     }
-    nav .more { opacity: 0.6; cursor: default; }
+    nav .dots { opacity: 0.7; cursor: default; }
 
     #configurator {
       display: flex;
-      padding-top: 70px;
+      padding-top: 65px;
       height: 100vh;
     }
     #sidebar {
-      width: 320px;
-      background: var(--panel-bg);
+      width: 340px;
+      background: var(--sidebar);
       backdrop-filter: blur(12px);
       border-right: 1px solid var(--border);
-      padding: 1.5rem;
+      padding: 1.6rem 1.2rem;
       overflow-y: auto;
     }
     .step {
-      background: var(--card-bg);
-      border-radius: 10px;
-      margin-bottom: 1.2rem;
-      overflow: hidden;
+      background: var(--card);
+      border-radius: 12px;
+      margin-bottom: 1.3rem;
       border: 1px solid var(--border);
+      overflow: hidden;
     }
     .step-header {
-      padding: 1rem 1.2rem;
+      padding: 1rem 1.3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.25);
+      border-bottom: 1px solid var(--border);
     }
     .step-title {
       font-size: 1.05rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
     }
     .checkmark {
       color: var(--check);
-      font-size: 1.3rem;
-      font-weight: bold;
+      font-size: 1.4rem;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
-    .step-content {
-      padding: 0.8rem 1.2rem 1.2rem;
+    .step.valid .checkmark { opacity: 1; }
+
+    .options-list {
+      padding: 1rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
     }
-    .step-content p {
+    button.option,
+    label.option {
+      width: 100%;
+      padding: 0.9rem 1.1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    button.option:hover,
+    input[type="radio"]:checked + label.option,
+    input[type="checkbox"]:checked + label.option {
+      background: rgba(0,200,255,0.18);
+      border-color: var(--accent);
+    }
+    input[type="radio"],
+    input[type="checkbox"] {
+      display: none;
+    }
+    .option-desc {
+      font-size: 0.82rem;
       color: var(--text-dim);
-      font-size: 0.92rem;
-      margin-top: 0.4rem;
+      margin-top: 0.3rem;
+      display: block;
     }
 
     #main-view {
       flex: 1;
-      position: relative;
-      background: #0a0f1a url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path d="M0 0h1v1H0z" fill="%23111" opacity="0.4"/></svg>') repeat;
+      background: #080d18 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><path d="M0 0h1v1H0z" fill="%23111" opacity="0.35"/></svg>') repeat;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
     #car-image {
-      max-width: 90%;
-      max-height: 85vh;
-      filter: drop-shadow(0 20px 40px rgba(0,200,255,0.15));
-      transition: all 0.6s ease;
+      max-width: 92%;
+      max-height: 82vh;
+      transition: opacity 0.5s ease;
+      opacity: 1;
     }
+    #car-image.loading { opacity: 0.4; }
 
     #chat-bubble {
       position: absolute;
-      bottom: 3rem;
-      right: 3rem;
-      max-width: 340px;
-      background: rgba(30, 45, 70, 0.92);
-      backdrop-filter: blur(10px);
+      bottom: 2.5rem;
+      right: 2.5rem;
+      width: 360px;
+      background: rgba(20, 35, 60, 0.94);
+      backdrop-filter: blur(12px);
       border-radius: 16px;
       border: 1px solid var(--border);
-      padding: 1.1rem 1.4rem;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.6);
     }
     .bubble-header {
       display: flex;
       align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 0.6rem;
+      gap: 0.9rem;
+      margin-bottom: 0.8rem;
     }
     .avatar {
-      width: 36px;
-      height: 36px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #00c8ff, #0090bb);
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
-      color: white;
       font-weight: bold;
+      color: #000;
+      font-size: 1.2rem;
     }
     .bubble-text {
       font-size: 0.94rem;
-      line-height: 1.45;
-      color: #e0f0ff;
+      line-height: 1.5;
+      color: #d8eaff;
     }
   </style>
 </head>
@@ -177,69 +203,171 @@
     <button>Énergie</button>
     <button>Recharge</button>
     <button>Shop</button>
-    <button class="more">…</button>
+    <button class="dots">…</button>
   </nav>
 </header>
 
 <div id="configurator">
   <aside id="sidebar">
 
-    <div class="step">
+    <div class="step" id="shape-step">
       <div class="step-header">
-        <div class="step-title">shape</div>
+        <div class="step-title">SHAPE</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="step-content">
-        <p>Select shape</p>
+      <div class="options-list">
+        <input type="radio" name="shape" id="sedan" value="sedan" checked>
+        <label class="option" for="sedan">Sedan</label>
+
+        <input type="radio" name="shape" id="suv" value="suv">
+        <label class="option" for="suv">SUV</label>
+
+        <input type="radio" name="shape" id="hatch" value="hatchback">
+        <label class="option" for="hatch">Hatchback</label>
       </div>
     </div>
 
-    <div class="step">
+    <div class="step" id="color-step">
       <div class="step-header">
-        <div class="step-title">color</div>
+        <div class="step-title">COLOR</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="step-content">
-        <p>Choose color</p>
+      <div class="options-list">
+        <input type="radio" name="color" id="wire" value="wireframe" checked>
+        <label class="option" for="wire">Wireframe (base)</label>
+
+        <input type="radio" name="color" id="blue" value="bleu-metallique">
+        <label class="option" for="blue">Bleu Métallique</label>
+
+        <input type="radio" name="color" id="green" value="vert-profond">
+        <label class="option" for="green">Vert Profond</label>
+
+        <input type="radio" name="color" id="black" value="noir-mat">
+        <label class="option" for="black">Noir Mat</label>
       </div>
     </div>
 
-    <div class="step">
+    <div class="step" id="engine-step">
       <div class="step-header">
-        <div class="step-title">engine</div>
+        <div class="step-title">ENGINE</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="step-content">
-        <p>Pick engine</p>
+      <div class="options-list">
+        <input type="radio" name="engine" id="std" value="standard" checked>
+        <label class="option" for="std">
+          Standard
+          <span class="option-desc">Équilibré – 450 km autonomie</span>
+        </label>
+
+        <input type="radio" name="engine" id="perf" value="performance">
+        <label class="option" for="perf">
+          Performance
+          <span class="option-desc">0-100 km/h en 3.8s</span>
+        </label>
+
+        <input type="radio" name="engine" id="tow" value="towing">
+        <label class="option" for="tow">
+          Towing
+          <span class="option-desc">1600 kg de charge utile</span>
+        </label>
       </div>
     </div>
 
-    <div class="step">
+    <div class="step" id="options-step">
       <div class="step-header">
-        <div class="step-title">options</div>
+        <div class="step-title">OPTIONS</div>
         <div class="checkmark">✓</div>
       </div>
-      <div class="step-content">
-        <p>Add options</p>
+      <div class="options-list">
+        <input type="checkbox" id="sport" value="sport">
+        <label class="option" for="sport">
+          Pack Sport
+          <span class="option-desc">Jantes 20", suspensions sport</span>
+        </label>
+
+        <input type="checkbox" id="tech" value="tech">
+        <label class="option" for="tech">
+          Pack Tech
+          <span class="option-desc">Caméra 360°, HUD</span>
+        </label>
+
+        <input type="checkbox" id="lux" value="luxury">
+        <label class="option" for="lux">
+          Pack Luxury
+          <span class="option-desc">Sièges premium, toit pano</span>
+        </label>
       </div>
     </div>
 
   </aside>
 
   <main id="main-view">
-    <img id="car-image" src="images/wireframe-sedan.png" alt="Voiture en mode wireframe">
+    <img id="car-image" src="images/config/sedan-wireframe.png" alt="Votre EVCar">
 
     <div id="chat-bubble">
       <div class="bubble-header">
         <div class="avatar">AI</div>
-        <div>You selected the Performance engine. It offers blistering acceleration, enhanced torque vectoring, and a sport-tuned suspension for maximum driving thrills. Range is slightly reduced compared to standard.</div>
+        <div>You selected the Performance engine.</div>
       </div>
       <div class="bubble-text">
+        It offers blistering acceleration, enhanced torque vectoring, and a sport-tuned suspension for maximum driving thrills. Range is slightly reduced compared to standard.<br><br>
         You can always upgrade later or add the Towing package if you need more capability.
       </div>
     </div>
   </main>
 </div>
+
+<script>
+  const carImg = document.getElementById('car-image');
+
+  function updateImage() {
+    const shape = document.querySelector('[name="shape"]:checked')?.value || 'sedan';
+    const color = document.querySelector('[name="color"]:checked')?.value || 'wireframe';
+    const engine = document.querySelector('[name="engine"]:checked')?.value || '';
+    let options = '';
+    document.querySelectorAll('#options-step input:checked').forEach(el => {
+      options += '+' + el.value;
+    });
+
+    let filename = `${shape}-${color}`;
+    if (engine) filename += `-${engine}`;
+    filename += options;
+
+    const src = `images/config/${filename}.png`;
+
+    carImg.classList.add('loading');
+    const preload = new Image();
+    preload.src = src;
+    preload.onload = () => {
+      carImg.src = src;
+      carImg.classList.remove('loading');
+    };
+    preload.onerror = () => {
+      carImg.src = `images/config/${shape}-wireframe.png`;
+      carImg.classList.remove('loading');
+    };
+  }
+
+  // Mise à jour au clic + validation des steps
+  document.querySelectorAll('input[name="shape"], input[name="color"], input[name="engine"], #options-step input').forEach(el => {
+    el.addEventListener('change', () => {
+      updateImage();
+
+      // Marquer le step comme validé
+      const step = el.closest('.step');
+      if (step) {
+        const checked = step.querySelector('input:checked');
+        step.classList.toggle('valid', !!checked);
+      }
+    });
+  });
+
+  // Init
+  updateImage();
+  document.querySelectorAll('.step').forEach(step => {
+    step.classList.add('valid'); // Tous validés par défaut pour l'exemple
+  });
+</script>
 
 </body>
 </html>
