@@ -4,46 +4,56 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <title>EVCars – Configurateur</title>
-  <link rel="stylesheet" href="assets/css/main.css" /> <!-- garde le CSS original -->
+  <link rel="stylesheet" href="assets/css/main.css" /> <!-- garde ton CSS original si besoin -->
   <style>
     :root {
       --bg-dark: #0a0e1a;
+      --panel-bg: #11151f;
       --accent: #00d4ff;
-      --panel-bg: rgba(20, 25, 40, 0.7);
+      --accent-dark: #0099bb;
       --text: #e0f7ff;
+      --border: rgba(0, 212, 255, 0.18);
     }
     body {
       background: var(--bg-dark);
       color: var(--text);
-      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
     }
-    #header {
+    header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(10px);
+      background: #000;
+      border-bottom: 1px solid var(--border);
       z-index: 100;
       padding: 1rem 2rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
-    #logo { font-size: 1.6rem; font-weight: bold; color: var(--accent); }
-    #main-nav ul {
+    #logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+    nav ul {
       display: flex;
-      gap: 2rem;
       list-style: none;
       margin: 0;
+      padding: 0;
+      gap: 1.5rem;
     }
-    #main-nav a {
+    nav a {
       color: white;
       text-decoration: none;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1.2rem;
       border-radius: 6px;
+      transition: all 0.2s;
     }
-    #main-nav a.active, #main-nav a:hover {
+    nav a.active,
+    nav a:hover {
       background: var(--accent);
-      color: black;
+      color: #000;
     }
 
     #configurator {
@@ -52,223 +62,176 @@
       padding-top: 80px;
     }
     #sidebar {
-      width: 320px;
+      width: 340px;
       background: var(--panel-bg);
-      backdrop-filter: blur(8px);
-      padding: 2rem 1.5rem;
-      border-right: 1px solid rgba(0,212,255,0.15);
+      padding: 2.5rem 1.8rem;
+      border-right: 1px solid var(--border);
       overflow-y: auto;
     }
-    .step {
-      margin-bottom: 2rem;
-    }
-    .step h3 {
+    h2 {
       color: var(--accent);
-      margin-bottom: 0.8rem;
-      font-size: 1.1rem;
+      font-size: 1.4rem;
+      margin: 0 0 2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    .step button, .step label {
+    .section-title {
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin: 1.8rem 0 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    button.option-btn {
       display: block;
       width: 100%;
-      padding: 0.9rem;
-      margin: 0.4rem 0;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(0,212,255,0.2);
+      padding: 1rem 1.2rem;
+      margin: 0.5rem 0;
+      background: #1a2233;
+      border: 1px solid var(--border);
       color: white;
+      text-align: left;
       cursor: pointer;
       border-radius: 6px;
-      text-align: left;
+      transition: all 0.2s;
+      font-size: 1rem;
     }
-    .step button.active, .step button:hover {
+    button.option-btn:hover {
+      background: #223344;
+      border-color: var(--accent-dark);
+    }
+    button.option-btn.active {
       background: var(--accent);
-      color: black;
+      color: #000;
       border-color: var(--accent);
+      font-weight: bold;
     }
 
     #car-view {
       flex: 1;
+      background: #000;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
       position: relative;
     }
     #car-image {
-      max-width: 90%;
-      max-height: 80vh;
-      transition: opacity 0.4s ease;
+      max-width: 92%;
+      max-height: 85vh;
+      object-fit: contain;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      opacity: 1;
+      transform: scale(1);
     }
-    #chatbot-bubble {
+    #car-image.loading {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    #placeholder-text {
       position: absolute;
-      bottom: 2rem;
-      right: 2rem;
-      background: rgba(0, 40, 60, 0.9);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--accent);
-      border-radius: 12px;
-      padding: 1.2rem 1.6rem;
-      max-width: 320px;
-      box-shadow: 0 10px 30px rgba(0,212,255,0.15);
-      display: none;
-    }
-    #chatbot-bubble::before {
-      content: "IA Assistant";
-      display: block;
-      font-size: 0.9rem;
-      color: var(--accent);
-      margin-bottom: 0.6rem;
+      color: #334455;
+      font-size: 5rem;
+      opacity: 0.15;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-<div id="page-wrapper">
+<header>
+  <div id="logo">EVCars</div>
+  <nav>
+    <ul>
+      <li><a href="#" class="active">VÉHICULE</a></li>
+      <li><a href="#">ÉNERGIE</a></li>
+      <li><a href="#">RECHARGE</a></li>
+      <li><a href="#">SHOP</a></li>
+    </ul>
+  </nav>
+</header>
 
-  <header id="header">
-    <div id="logo">EVCars</div>
-    <nav id="main-nav">
-      <ul>
-        <li><a href="#" class="active">Véhicule</a></li>
-        <li><a href="#">Énergie</a></li>
-        <li><a href="#">Recharge</a></li>
-        <li><a href="#">Shop</a></li>
-      </ul>
-    </nav>
-  </header>
+<div id="configurator">
+  <aside id="sidebar">
+    <h2>CONFIGURATION</h2>
 
-  <div id="configurator">
-    <aside id="sidebar">
-      <h2>Configuration</h2>
+    <div class="section-title">FORME</div>
+    <button class="option-btn active" data-shape="sedan">SEDAN</button>
+    <button class="option-btn" data-shape="suv">SUV</button>
+    <button class="option-btn" data-shape="hatchback">HATCHBACK</button>
 
-      <div class="step" id="shape-step">
-        <h3>Forme</h3>
-        <button data-shape="sedan" class="active">Sedan</button>
-        <button data-shape="suv">SUV</button>
-        <button data-shape="hatchback">Hatchback</button>
-      </div>
+    <div class="section-title">COULEUR</div>
+    <button class="option-btn active" data-color="wireframe">WIREFRAME (BASE)</button>
+    <button class="option-btn" data-color="bleu-metallique">BLEU MÉTALLIQUE</button>
+    <button class="option-btn" data-color="vert-profond">VERT PROFOND</button>
+    <button class="option-btn" data-color="noir-mat">NOIR MAT</button>
 
-      <div class="step" id="color-step">
-        <h3>Couleur</h3>
-        <button data-color="wireframe">Wireframe (base)</button>
-        <button data-color="blue-metallic">Bleu métallique</button>
-        <button data-color="deep-green">Vert profond</button>
-        <button data-color="matte-black">Noir mat</button>
-      </div>
+    <!-- À venir : MOTEUR et OPTIONS -->
+    <div class="section-title">MOTEUR</div>
+    <p style="opacity:0.5; font-size:0.9rem;">(bientôt disponible)</p>
+  </aside>
 
-      <div class="step" id="engine-step">
-        <h3>Moteur</h3>
-        <button data-engine="standard">Standard</button>
-        <button data-engine="performance">Performance</button>
-        <button data-engine="towing">Towing</button>
-      </div>
-
-      <div class="step" id="options-step">
-        <h3>Options</h3>
-        <label><input type="checkbox" data-option="sport"> Pack Sport</label>
-        <label><input type="checkbox" data-option="tech"> Pack Tech</label>
-        <label><input type="checkbox" data-option="luxury"> Pack Luxury</label>
-      </div>
-    </aside>
-
-    <main id="car-view">
-      <img id="car-image" src="assets/images/config/sedan-wireframe.png" alt="Votre EVCars">
-      <div id="chatbot-bubble"></div>
-    </main>
-  </div>
-
+  <main id="car-view">
+    <img id="car-image" src="images/config/sedan-wireframe.png" alt="Votre EVCar">
+    <div id="placeholder-text">Votre EVCars</div>
+  </main>
 </div>
 
 <script>
   const carImage = document.getElementById('car-image');
-  const bubble = document.getElementById('chatbot-bubble');
 
   // État actuel
-  let state = {
+  let current = {
     shape: 'sedan',
-    color: 'wireframe',
-    engine: null,
-    options: []
+    color: 'wireframe'
   };
 
-  // Textes prédéfinis du "chatbot"
-  const messages = {
-    wireframe: "Modèle de base en mode scan 3D. Choisissez une forme et une couleur pour commencer la personnalisation.",
-    'blue-metallic': "Excellent choix ! Le Bleu Métallique Électrique donne un look futuriste et premium.",
-    'deep-green': "Vert Profond – une teinte audacieuse et écologique, parfaite pour une identité forte.",
-    'matte-black': "Noir Mat Stealth – discret, agressif et très tendance en 2026.",
-    standard: "Moteur Standard : 320 km d'autonomie, excellente efficacité énergétique pour la ville et les longs trajets.",
-    performance: "Moteur Performance : accélération 0-100 km/h en 3.8s, plus de puissance, mais autonomie légèrement réduite.",
-    towing: "Moteur Towing : capacité de remorquage jusqu'à 1 600 kg, batterie renforcée pour charges lourdes.",
-    sport: "Pack Sport ajouté : suspensions sport, jantes 20", design aérodynamique extérieur.",
-    tech: "Pack Tech : affichage tête haute, assistant vocal avancé, caméra 360°.",
-    luxury: "Pack Luxury : sièges en cuir végan premium, éclairage d’ambiance personnalisable, toit panoramique."
-  };
+  function updateCarImage() {
+    const filename = `${current.shape}-${current.color}.png`;
+    const newSrc = `images/config/${filename}`;
 
-  function updateCar() {
-    let filename = `${state.shape}-${state.color}`;
-    if (state.engine) filename += `-${state.engine}`;
-    state.options.forEach(opt => filename += `+${opt}`);
-
-    // Fallback si l'image exacte n'existe pas → on revient à une version de base
-    const src = `assets/images/config/${filename}.png`;
-    carImage.src = src;
-
-    // Simulation de chargement
-    carImage.style.opacity = 0;
-    setTimeout(() => { carImage.style.opacity = 1; }, 150);
+    // Effet de chargement
+    carImage.classList.add('loading');
+    
+    // Précharger pour éviter flicker
+    const preload = new Image();
+    preload.src = newSrc;
+    preload.onload = () => {
+      carImage.src = newSrc;
+      carImage.classList.remove('loading');
+    };
+    preload.onerror = () => {
+      // Fallback si l'image n'existe pas encore
+      carImage.src = `images/config/${current.shape}-wireframe.png`;
+      carImage.classList.remove('loading');
+    };
   }
 
-  function showMessage(key) {
-    if (messages[key]) {
-      bubble.textContent = messages[key];
-      bubble.style.display = 'block';
-      setTimeout(() => { bubble.style.display = 'none'; }, 8000);
-    }
-  }
-
-  // Événements
-  document.querySelectorAll('#shape-step button').forEach(btn => {
+  // Gestion des formes
+  document.querySelectorAll('[data-shape]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('#shape-step button').forEach(b => b.classList.remove('active'));
+      // Retirer active de tous les boutons forme
+      document.querySelectorAll('[data-shape]').forEach(b => b.classList.remove('active'));
+      // Ajouter active au cliqué
       btn.classList.add('active');
-      state.shape = btn.dataset.shape;
-      updateCar();
-      showMessage(state.color); // refresh message couleur
+      
+      current.shape = btn.dataset.shape;
+      updateCarImage();
     });
   });
 
-  document.querySelectorAll('#color-step button').forEach(btn => {
+  // Gestion des couleurs
+  document.querySelectorAll('[data-color]').forEach(btn => {
     btn.addEventListener('click', () => {
-      state.color = btn.dataset.color;
-      updateCar();
-      showMessage(state.color);
-    });
-  });
-
-  document.querySelectorAll('#engine-step button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.engine = btn.dataset.engine;
-      updateCar();
-      showMessage(state.engine);
-    });
-  });
-
-  document.querySelectorAll('#options-step input').forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-      const opt = checkbox.dataset.option;
-      if (checkbox.checked) {
-        state.options.push(opt);
-        showMessage(opt);
-      } else {
-        state.options = state.options.filter(o => o !== opt);
-      }
-      updateCar();
+      document.querySelectorAll('[data-color]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      current.color = btn.dataset.color;
+      updateCarImage();
     });
   });
 
   // Init
-  updateCar();
-  showMessage('wireframe');
+  updateCarImage();
 </script>
 
 </body>
