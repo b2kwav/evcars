@@ -291,10 +291,16 @@
 
     .checkmark {
       color: var(--accent-electric);
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       opacity: 0;
       transition: all 0.3s;
       filter: drop-shadow(0 0 8px var(--glow-electric));
+      font-weight: 300;
+    }
+    
+    .checkmark::before {
+      content: '⬢';
+      font-size: 1.3rem;
     }
 
     .step.valid .checkmark { 
@@ -357,8 +363,7 @@
       box-shadow: 0 0 20px var(--glow-cyan);
     }
 
-    input[type="radio"]:checked + label.option,
-    input[type="checkbox"]:checked + label.option {
+    label.option.selected {
       background: linear-gradient(135deg, 
         rgba(0, 240, 255, 0.15), 
         rgba(0, 255, 136, 0.1));
@@ -441,15 +446,16 @@
 
     /* AI Chat bubble with futuristic design */
     #chat-bubble {
-      position: absolute;
-      bottom: 3rem;
-      right: 3rem;
-      width: 420px;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 360px;
+      max-width: calc(100vw - 420px - 3rem);
       background: rgba(10, 15, 30, 0.92);
       backdrop-filter: blur(30px) saturate(180%);
       border-radius: 20px;
       border: 1px solid var(--border-tech);
-      padding: 1.8rem 2rem;
+      padding: 1.5rem 1.8rem;
       box-shadow: 
         0 20px 60px rgba(0, 0, 0, 0.6),
         0 0 30px var(--glow-cyan),
@@ -457,8 +463,8 @@
       opacity: 0;
       transform: translateY(30px) scale(0.95);
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
       overflow: hidden;
+      z-index: 50;
     }
 
     #chat-bubble::before {
@@ -489,13 +495,13 @@
     .bubble-header {
       display: flex;
       align-items: center;
-      gap: 1.2rem;
-      margin-bottom: 1rem;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .avatar {
-      width: 50px;
-      height: 50px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
       display: flex;
@@ -504,8 +510,9 @@
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
       color: #000;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       position: relative;
+      flex-shrink: 0;
       box-shadow: 
         0 0 20px var(--glow-cyan),
         inset 0 2px 10px rgba(255, 255, 255, 0.3);
@@ -524,13 +531,13 @@
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-size: 1.05rem;
+      font-size: 1rem;
       letter-spacing: 0.5px;
     }
 
     .bubble-text {
-      font-size: 0.95rem;
-      line-height: 1.7;
+      font-size: 0.9rem;
+      line-height: 1.6;
       color: var(--text-secondary);
       font-weight: 300;
     }
@@ -627,10 +634,10 @@
     <div class="step" id="shape-step">
       <div class="step-header">
         <div class="step-title">SHAPE</div>
-        <div class="checkmark">✓</div>
+        <div class="checkmark"></div>
       </div>
       <div class="options-list">
-        <input type="radio" name="shape" id="sedan" value="sedan" checked data-ai-title="Sedan Élégant" data-ai-text="Le sedan offre un design raffiné et aérodynamique avec un coefficient de traînée de seulement 0.24. Parfait pour les trajets quotidiens et les longs voyages autoroutiers, il combine élégance et efficacité énergétique. Son coffre spacieux de 530L saura accueillir tous vos bagages.">
+        <input type="radio" name="shape" id="sedan" value="sedan" data-ai-title="Sedan Élégant" data-ai-text="Le sedan offre un design raffiné et aérodynamique avec un coefficient de traînée de seulement 0.24. Parfait pour les trajets quotidiens et les longs voyages autoroutiers, il combine élégance et efficacité énergétique. Son coffre spacieux de 530L saura accueillir tous vos bagages.">
         <label class="option" for="sedan">Sedan</label>
 
         <input type="radio" name="shape" id="suv" value="suv" data-ai-title="SUV Polyvalent" data-ai-text="Notre SUV électrique allie robustesse et praticité. Avec sa garde au sol relevée de 22cm et son hayon généreux, il s'adapte à tous vos besoins : famille nombreuse, équipements sportifs ou escapades nature. Les 7 places en option vous offrent une flexibilité maximale.">
@@ -644,10 +651,10 @@
     <div class="step" id="color-step">
       <div class="step-header">
         <div class="step-title">COLOR</div>
-        <div class="checkmark">✓</div>
+        <div class="checkmark"></div>
       </div>
       <div class="options-list">
-        <input type="radio" name="color" id="wire" value="wireframe" checked data-ai-title="Base Wireframe" data-ai-text="Cette vue technique vous permet de visualiser les lignes pures de votre future EVCar. C'est le point de départ idéal pour imaginer votre personnalisation. Sélectionnez une couleur pour voir instantanément le rendu final avec notre système de prévisualisation réaliste.">
+        <input type="radio" name="color" id="wire" value="wireframe" data-ai-title="Base Wireframe" data-ai-text="Cette vue technique vous permet de visualiser les lignes pures de votre future EVCar. C'est le point de départ idéal pour imaginer votre personnalisation. Sélectionnez une couleur pour voir instantanément le rendu final avec notre système de prévisualisation réaliste.">
         <label class="option" for="wire">Wireframe (base)</label>
 
         <input type="radio" name="color" id="blue" value="bleu-metallique" data-ai-title="Bleu Métallique Premium" data-ai-text="Notre bleu métallique signature capture la lumière de manière spectaculaire. Cette teinte triple couche avec effet nacré change de tonalité selon l'éclairage. Traitement céramique inclus pour une protection durable contre les UV et les micro-rayures. Un vrai coup de cœur chez nos clients !">
@@ -664,10 +671,10 @@
     <div class="step" id="engine-step">
       <div class="step-header">
         <div class="step-title">ENGINE</div>
-        <div class="checkmark">✓</div>
+        <div class="checkmark"></div>
       </div>
       <div class="options-list">
-        <input type="radio" name="engine" id="std" value="standard" checked data-ai-title="Moteur Standard" data-ai-text="Notre moteur standard délivre 300 ch avec un couple instantané de 440 Nm. Batterie 75 kWh pour 450 km d'autonomie WLTP. Recharge rapide : 10 à 80% en 28 minutes sur borne 150 kW. Le meilleur équilibre performances/autonomie/prix pour un usage quotidien serein.">
+        <input type="radio" name="engine" id="std" value="standard" data-ai-title="Moteur Standard" data-ai-text="Notre moteur standard délivre 300 ch avec un couple instantané de 440 Nm. Batterie 75 kWh pour 450 km d'autonomie WLTP. Recharge rapide : 10 à 80% en 28 minutes sur borne 150 kW. Le meilleur équilibre performances/autonomie/prix pour un usage quotidien serein.">
         <label class="option" for="std">
           Standard
           <span class="option-desc">Équilibré – 450 km autonomie</span>
@@ -690,7 +697,7 @@
     <div class="step" id="options-step">
       <div class="step-header">
         <div class="step-title">OPTIONS</div>
-        <div class="checkmark">✓</div>
+        <div class="checkmark"></div>
       </div>
       <div class="options-list">
         <input type="checkbox" id="sport" value="sport" data-ai-title="Pack Sport" data-ai-text="Jantes forgées 20 pouces (-8 kg par roue), pneus Michelin Pilot Sport EV homologués. Suspensions pilotées avec mode Sport+ (-15mm, amortissement variable). Étriers de frein rouge, sièges baquets en Alcantara avec maintiens latéraux renforcés. L'ADN racing d'EVCars !">
@@ -755,13 +762,19 @@
   }
 
   function updateImage() {
-    const shape = document.querySelector('[name="shape"]:checked')?.value || 'sedan';
-    const color = document.querySelector('[name="color"]:checked')?.value || 'wireframe';
+    const shape = document.querySelector('[name="shape"]:checked')?.value || '';
+    const color = document.querySelector('[name="color"]:checked')?.value || '';
     const engine = document.querySelector('[name="engine"]:checked')?.value || '';
     let options = '';
     document.querySelectorAll('#options-step input:checked').forEach(el => {
       options += '+' + el.value;
     });
+
+    // Si aucune shape ou couleur sélectionnée, ne pas afficher d'image
+    if (!shape || !color) {
+      carImg.style.opacity = '0';
+      return;
+    }
 
     let filename = `${shape}-${color}`;
     if (engine) filename += `-${engine}`;
@@ -774,38 +787,102 @@
     preload.src = src;
     preload.onload = () => {
       carImg.src = src;
+      carImg.style.opacity = '1';
       carImg.classList.remove('loading');
     };
     preload.onerror = () => {
       carImg.src = `images/config/${shape}-wireframe.png`;
+      carImg.style.opacity = '1';
       carImg.classList.remove('loading');
     };
   }
 
-  document.querySelectorAll('input[name="shape"], input[name="color"], input[name="engine"], #options-step input').forEach(el => {
-    el.addEventListener('change', () => {
-      updateImage();
+  // Gestion des radio buttons avec toggle (clic pour désélectionner)
+  document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    const label = radio.nextElementSibling;
+    
+    radio.addEventListener('click', function(e) {
+      // Si déjà sélectionné, on désélectionne
+      if (this.dataset.wasChecked === 'true') {
+        this.checked = false;
+        this.dataset.wasChecked = 'false';
+        
+        // Retirer visuellement la sélection
+        label.classList.remove('selected');
+        
+        // Mettre à jour l'image
+        updateImage();
+        
+        // Valider le step
+        const step = this.closest('.step');
+        if (step) {
+          const checked = step.querySelector('input:checked');
+          step.classList.toggle('valid', !!checked);
+        }
+        
+        e.preventDefault();
+      } else {
+        // Désélectionner visuellement tous les autres du même groupe
+        document.querySelectorAll(`[name="${this.name}"]`).forEach(r => {
+          r.dataset.wasChecked = 'false';
+          r.nextElementSibling.classList.remove('selected');
+        });
+        
+        this.dataset.wasChecked = 'true';
+        label.classList.add('selected');
+        
+        // Mettre à jour l'image
+        updateImage();
+        
+        // Valider le step
+        const step = this.closest('.step');
+        if (step) {
+          step.classList.add('valid');
+        }
+        
+        // Afficher la bulle AI
+        const aiTitle = this.dataset.aiTitle || 'Option sélectionnée';
+        const aiText = this.dataset.aiText || 'Excellent choix ! Cette option améliorera votre expérience EVCars.';
+        updateAIBubble(aiTitle, aiText);
+      }
+    });
+  });
 
-      const step = el.closest('.step');
+  // Gestion des checkboxes (options) - fonctionne normalement
+  document.querySelectorAll('#options-step input[type="checkbox"]').forEach(checkbox => {
+    const label = checkbox.nextElementSibling;
+    
+    checkbox.addEventListener('change', function() {
+      // Toggle visuel
+      if (this.checked) {
+        label.classList.add('selected');
+      } else {
+        label.classList.remove('selected');
+      }
+      
+      updateImage();
+      
+      // Valider le step si au moins une option sélectionnée
+      const step = this.closest('.step');
       if (step) {
         const checked = step.querySelector('input:checked');
         step.classList.toggle('valid', !!checked);
       }
-
-      const aiTitle = el.dataset.aiTitle || 'Option sélectionnée';
-      const aiText = el.dataset.aiText || 'Excellent choix ! Cette option améliorera votre expérience EVCars.';
+      
+      // Afficher la bulle AI
+      const aiTitle = this.dataset.aiTitle || 'Option sélectionnée';
+      const aiText = this.dataset.aiText || 'Excellent choix ! Cette option améliorera votre expérience EVCars.';
       updateAIBubble(aiTitle, aiText);
     });
   });
 
+  // Afficher la bulle de bienvenue au chargement
   setTimeout(() => {
     chatBubble.classList.add('visible');
   }, 800);
 
-  updateImage();
-  document.querySelectorAll('.step').forEach(step => {
-    step.classList.add('valid');
-  });
+  // Initialiser l'image (vide au départ)
+  carImg.style.opacity = '0';
 </script>
 
 </body>
