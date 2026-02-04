@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prévisualisation - Shape × Color + Engine + Options</title>
+  <link rel="stylesheet" href="../src/styles/multiselect-shape-color.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Configurer le véhicule</h1>
+
+    <form id="configForm" class="controls" aria-describedby="previewDesc">
+      <fieldset>
+        <legend>Shape</legend>
+        <label><input type="radio" name="shape" value="sedan" checked> Sedan</label>
+        <label><input type="radio" name="shape" value="suv"> SUV</label>
+        <label><input type="radio" name="shape" value="hatch"> Hatch</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Color</legend>
+        <label><input type="radio" name="color" value="red" checked> Rouge</label>
+        <label><input type="radio" name="color" value="blue"> Bleu</label>
+        <label><input type="radio" name="color" value="white"> Blanc</label>
+        <label><input type="radio" name="color" value="black"> Noir</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Engine</legend>
+        <label><input type="radio" name="engine" value="engine1" checked> Engine 1</label>
+        <label><input type="radio" name="engine" value="engine2"> Engine 2</label>
+        <label><input type="radio" name="engine" value="engine3"> Engine 3</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Options</legend>
+        <label><input type="checkbox" name="opt" value="roof"> Toit ouvrant</label>
+        <label><input type="checkbox" name="opt" value="spoiler"> Aileron</label>
+        <label><input type="checkbox" name="opt" value="fog"> Phare antibrouillard</label>
+      </fieldset>
+    </form>
+
+    <section id="preview" class="preview" aria-live="polite">
+      <h2 id="previewDesc" class="sr-only">Aperçu de la configuration</h2>
+
+      <div class="combo-wrap" id="comboWrap" aria-hidden="false">
+        <picture id="comboPicture" class="combo-picture">
+          <img id="comboImg" src="" alt="" loading="lazy">
+        </picture>
+      </div>
+
+      <div class="engine-wrap" id="engineWrap" aria-hidden="false">
+        <picture id="enginePicture">
+          <img id="engineImg" src="" alt="" loading="lazy">
+        </picture>
+      </div>
+
+      <div class="options-wrap" id="optionsWrap" aria-live="polite"></div>
+
+      <div id="fallbackMsg" class="fallback-msg" hidden>Aucune image disponible pour cette combinaison.</div>
+    </section>
+  </main>
+
+  <script src="../public/multiselect-shape-color.js" defer></script>
+</body>
+</html>
