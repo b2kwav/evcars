@@ -5,35 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <title>EVCars – Configurateur</title>
   <style>
-    /* ... (je garde exactement le même CSS que dans le message précédent pour ne pas alourdir) ... */
+    :root {
+      --bg: #0d1422;
+      --header: #17223a;
+      --sidebar: rgba(20, 30, 50, 0.82);
+      --card: rgba(30, 45, 70, 0.65);
+      --accent: #00c8ff;
+      --accent-dim: #0090bb;
+      --text: #e8f5ff;
+      --text-dim: #a0c8e0;
+      --check: #00ffaa;
+      --border: rgba(0, 200, 255, 0.20);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--header);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+    nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+    nav button {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      padding: 0.6rem 1.3rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+    nav button.active,
+    nav button:hover {
+      background: rgba(0,200,255,0.15);
+      color: white;
+    }
+    nav .dots { opacity: 0.7; cursor: default; }
+
+    #configurator {
+      display: flex;
+      padding-top: 65px;
+      height: 100vh;
+    }
+    #sidebar {
+      width: 340px;
+      background: var(--sidebar);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid var(--border);
+      padding: 1.6rem 1.2rem;
+      overflow-y: auto;
+    }
+    .step {
+      background: var(--card);
+      border-radius: 12px;
+      margin-bottom: 1.3rem;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .step-header {
+      padding: 1rem 1.3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.25);
+      border-bottom: 1px solid var(--border);
+    }
+    .step-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .checkmark {
+      color: var(--check);
+      font-size: 1.4rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .step.valid .checkmark { opacity: 1; }
+
+    .options-list {
+      padding: 1rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    button.option,
+    label.option {
+      width: 100%;
+      padding: 0.9rem 1.1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    button.option:hover,
+    input[type="radio"]:checked + label.option,
+    input[type="checkbox"]:checked + label.option {
+      background: rgba(0,200,255,0.18);
+      border-color: var(--accent);
+    }
+    input[type="radio"],
+    input[type="checkbox"] {
+      display: none;
+    }
+    .option-desc {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-top: 0.3rem;
+      display: block;
+    }
+
+    #main-view {
+      flex: 1;
+      background: #080d18 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><path d="M0 0h1v1H0z" fill="%23111" opacity="0.35"/></svg>') repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    #car-image {
+      max-width: 92%;
+      max-height: 82vh;
+      transition: opacity 0.5s ease;
+      opacity: 1;
+    }
+    #car-image.loading { opacity: 0.4; }
+
     #chat-bubble {
       position: absolute;
       bottom: 2.5rem;
       right: 2.5rem;
-      width: 380px;
+      width: 360px;
       background: rgba(20, 35, 60, 0.94);
       backdrop-filter: blur(12px);
       border-radius: 16px;
       border: 1px solid var(--border);
-      padding: 1.3rem 1.6rem;
+      padding: 1.2rem 1.5rem;
       box-shadow: 0 15px 50px rgba(0,0,0,0.6);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    #chat-bubble.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
     .bubble-header {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.9rem;
+      gap: 0.9rem;
+      margin-bottom: 0.8rem;
     }
     .avatar {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--accent-dim));
       display: flex;
@@ -41,23 +185,120 @@
       justify-content: center;
       font-weight: bold;
       color: #000;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
     }
     .bubble-text {
-      font-size: 0.96rem;
-      line-height: 1.55;
+      font-size: 0.94rem;
+      line-height: 1.5;
       color: #d8eaff;
     }
   </style>
 </head>
 <body>
 
-<!-- Header et structure identiques à avant -->
+<header>
+  <div class="logo">EVCars</div>
+  <nav>
+    <button class="active">Véhicule</button>
+    <button>Énergie</button>
+    <button>Recharge</button>
+    <button>Shop</button>
+    <button class="dots">…</button>
+  </nav>
+</header>
 
 <div id="configurator">
   <aside id="sidebar">
-    <!-- Les 4 steps SHAPE / COLOR / ENGINE / OPTIONS exactement comme avant -->
-    <!-- ... colle ici le contenu des <div class="step"> de la version précédente ... -->
+
+    <div class="step" id="shape-step">
+      <div class="step-header">
+        <div class="step-title">SHAPE</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="options-list">
+        <input type="radio" name="shape" id="sedan" value="sedan" checked>
+        <label class="option" for="sedan">Sedan</label>
+
+        <input type="radio" name="shape" id="suv" value="suv">
+        <label class="option" for="suv">SUV</label>
+
+        <input type="radio" name="shape" id="hatch" value="hatchback">
+        <label class="option" for="hatch">Hatchback</label>
+      </div>
+    </div>
+
+    <div class="step" id="color-step">
+      <div class="step-header">
+        <div class="step-title">COLOR</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="options-list">
+        <input type="radio" name="color" id="wire" value="wireframe" checked>
+        <label class="option" for="wire">Wireframe (base)</label>
+
+        <input type="radio" name="color" id="blue" value="bleu-metallique">
+        <label class="option" for="blue">Bleu Métallique</label>
+
+        <input type="radio" name="color" id="green" value="vert-profond">
+        <label class="option" for="green">Vert Profond</label>
+
+        <input type="radio" name="color" id="black" value="noir-mat">
+        <label class="option" for="black">Noir Mat</label>
+      </div>
+    </div>
+
+    <div class="step" id="engine-step">
+      <div class="step-header">
+        <div class="step-title">ENGINE</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="options-list">
+        <input type="radio" name="engine" id="std" value="standard" checked>
+        <label class="option" for="std">
+          Standard
+          <span class="option-desc">Équilibré – 450 km autonomie</span>
+        </label>
+
+        <input type="radio" name="engine" id="perf" value="performance">
+        <label class="option" for="perf">
+          Performance
+          <span class="option-desc">0-100 km/h en 3.8s</span>
+        </label>
+
+        <input type="radio" name="engine" id="tow" value="towing">
+        <label class="option" for="tow">
+          Towing
+          <span class="option-desc">1600 kg de charge utile</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="step" id="options-step">
+      <div class="step-header">
+        <div class="step-title">OPTIONS</div>
+        <div class="checkmark">✓</div>
+      </div>
+      <div class="options-list">
+        <input type="checkbox" id="sport" value="sport">
+        <label class="option" for="sport">
+          Pack Sport
+          <span class="option-desc">Jantes 20", suspensions sport</span>
+        </label>
+
+        <input type="checkbox" id="tech" value="tech">
+        <label class="option" for="tech">
+          Pack Tech
+          <span class="option-desc">Caméra 360°, HUD</span>
+        </label>
+
+        <input type="checkbox" id="lux" value="luxury">
+        <label class="option" for="lux">
+          Pack Luxury
+          <span class="option-desc">Sièges premium, toit pano</span>
+        </label>
+      </div>
+    </div>
+
   </aside>
 
   <main id="main-view">
@@ -66,10 +307,11 @@
     <div id="chat-bubble">
       <div class="bubble-header">
         <div class="avatar">AI</div>
-        <div id="chat-title">Assistant EVCars</div>
+        <div>You selected the Performance engine.</div>
       </div>
-      <div class="bubble-text" id="chat-message">
-        Bienvenue dans le configurateur ! Choisissez une forme pour commencer.
+      <div class="bubble-text">
+        It offers blistering acceleration, enhanced torque vectoring, and a sport-tuned suspension for maximum driving thrills. Range is slightly reduced compared to standard.<br><br>
+        You can always upgrade later or add the Towing package if you need more capability.
       </div>
     </div>
   </main>
@@ -77,108 +319,22 @@
 
 <script>
   const carImg = document.getElementById('car-image');
-  const chatBubble = document.getElementById('chat-bubble');
-  const chatTitle = document.getElementById('chat-title');
-  const chatMessage = document.getElementById('chat-message');
 
-  // Messages du chatbot par catégorie et valeur
-  const chatMessages = {
-    init: {
-      title: "Assistant EVCars",
-      text: "Bienvenue ! Commencez par choisir la forme de votre véhicule."
-    },
-    shape: {
-      sedan: {
-        title: "Forme sélectionnée",
-        text: "Le sedan offre un design élégant et aérodynamique, parfait pour un usage quotidien et les longs trajets."
-      },
-      suv: {
-        title: "Forme sélectionnée",
-        text: "Le SUV combine espace intérieur généreux, position de conduite surélevée et excellente visibilité."
-      },
-      hatchback: {
-        title: "Forme sélectionnée",
-        text: "Le hatchback est compact, agile en ville et offre un accès pratique au coffre."
-      }
-    },
-    color: {
-      wireframe: {
-        title: "Mode Wireframe",
-        text: "Vue de modélisation 3D de base. Choisissez une couleur pour voir le rendu final."
-      },
-      'bleu-metallique': {
-        title: "Couleur appliquée",
-        text: "Bleu Métallique Électrique : une teinte premium qui reflète la lumière avec élégance et modernité."
-      },
-      'vert-profond': {
-        title: "Couleur appliquée",
-        text: "Vert Profond : couleur audacieuse et écologique, très appréciée pour son caractère unique."
-      },
-      'noir-mat': {
-        title: "Couleur appliquée",
-        text: "Noir Mat Stealth : look discret, agressif et très tendance en 2026."
-      }
-    },
-    engine: {
-      standard: {
-        title: "Moteur Standard",
-        text: "Puissance équilibrée, autonomie maximale (~480 km WLTP), idéal pour un usage mixte ville/autoroute."
-      },
-      performance: {
-        title: "Moteur Performance",
-        text: "Accélération fulgurante (0-100 km/h en ~3.8s), couple instantané, suspensions sport. Autonomie légèrement réduite."
-      },
-      towing: {
-        title: "Moteur Towing",
-        text: "Capacité de remorquage jusqu'à 1600 kg, batterie renforcée et refroidissement optimisé pour charges lourdes."
-      }
-    },
-    option: {
-      sport: "Pack Sport ajouté : jantes 20\", kit carrosserie aérodynamique, suspensions sport → look et tenue de route renforcés.",
-      tech: "Pack Tech activé : affichage tête haute, caméra 360°, assistant vocal avancé, recharge sans fil.",
-      luxury: "Pack Luxury intégré : sièges en cuir végan premium, éclairage d’ambiance, toit panoramique ouvrant."
-    }
-  };
-
-  function showChat(category, value) {
-    let message = chatMessages.init;
-    
-    if (category === 'init') {
-      message = chatMessages.init;
-    } else if (category === 'option') {
-      message = { title: "Option ajoutée", text: chatMessages.option[value] || "Option activée." };
-    } else if (chatMessages[category] && chatMessages[category][value]) {
-      message = chatMessages[category][value];
-    }
-
-    chatTitle.textContent = message.title;
-    chatMessage.textContent = message.text;
-
-    // Effet d'apparition
-    chatBubble.classList.remove('visible');
-    setTimeout(() => {
-      chatBubble.classList.add('visible');
-    }, 100);
-  }
-
-  function updateImageAndChat() {
+  function updateImage() {
     const shape = document.querySelector('[name="shape"]:checked')?.value || 'sedan';
     const color = document.querySelector('[name="color"]:checked')?.value || 'wireframe';
     const engine = document.querySelector('[name="engine"]:checked')?.value || '';
+    let options = '';
+    document.querySelectorAll('#options-step input:checked').forEach(el => {
+      options += '+' + el.value;
+    });
 
     let filename = `${shape}-${color}`;
     if (engine) filename += `-${engine}`;
+    filename += options;
 
-    let optionsStr = '';
-    const checkedOptions = [];
-    document.querySelectorAll('#options-step input:checked').forEach(el => {
-      optionsStr += '+' + el.value;
-      checkedOptions.push(el.value);
-    });
-    filename += optionsStr;
-
-    // Mise à jour image
     const src = `images/config/${filename}.png`;
+
     carImg.classList.add('loading');
     const preload = new Image();
     preload.src = src;
@@ -190,39 +346,27 @@
       carImg.src = `images/config/${shape}-wireframe.png`;
       carImg.classList.remove('loading');
     };
-
-    // Mise à jour chatbot (priorité au dernier changement)
-    // Pour simplifier ici, on affiche le message du dernier choix détecté
-    // (dans une vraie version, on pourrait stocker le dernier événement)
-    if (engine) {
-      showChat('engine', engine);
-    } else if (color !== 'wireframe') {
-      showChat('color', color);
-    } else {
-      showChat('shape', shape);
-    }
-
-    // Bonus : si options changent, on peut montrer la dernière ajoutée
-    // (ici simplifié)
   }
 
-  // Écoute tous les changements
-  document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
-    input.addEventListener('change', () => {
-      updateImageAndChat();
+  // Mise à jour au clic + validation des steps
+  document.querySelectorAll('input[name="shape"], input[name="color"], input[name="engine"], #options-step input').forEach(el => {
+    el.addEventListener('change', () => {
+      updateImage();
 
-      // Validation visuelle des steps
-      const step = input.closest('.step');
+      // Marquer le step comme validé
+      const step = el.closest('.step');
       if (step) {
-        const hasSelection = step.querySelector('input:checked');
-        step.classList.toggle('valid', !!hasSelection);
+        const checked = step.querySelector('input:checked');
+        step.classList.toggle('valid', !!checked);
       }
     });
   });
 
-  // Initialisation
-  showChat('init');
-  updateImageAndChat();
+  // Init
+  updateImage();
+  document.querySelectorAll('.step').forEach(step => {
+    step.classList.add('valid'); // Tous validés par défaut pour l'exemple
+  });
 </script>
 
 </body>
