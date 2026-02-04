@@ -1,0 +1,100 @@
+/* version CSS compilée du SCSS d'exemple */
+* { box-sizing: border-box; }
+.container { max-width: 1000px; margin: 24px auto; padding: 0 16px; font-family: system-ui, Arial, sans-serif; color: #111; }
+.controls { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:20px; }
+.controls fieldset { border:1px solid #eee; padding:10px; border-radius:6px; min-width:160px; }
+.controls label { display:block; margin:6px 0; cursor:pointer; font-size:0.95rem; }
+
+.preview {
+  position: relative;
+  background: #fafafa;
+  border: 1px solid #eee;
+  padding: 18px;
+  border-radius: 8px;
+  display:grid;
+  grid-template-columns: 1fr 220px;
+  gap:16px;
+  align-items:start;
+}
+
+.combo-wrap {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height: 320px;
+  background: linear-gradient(180deg,#fff,#f7f7f8);
+  border-radius:8px;
+  padding: 12px;
+}
+.combo-picture img {
+  max-width: 100%;
+  height: auto;
+  border-radius:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+
+.engine-wrap {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:120px;
+  background: #fff;
+  border-radius:8px;
+  padding:8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.engine-wrap img { max-width:100%; height:auto; }
+
+.options-wrap {
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+  min-height:120px;
+  background:#fff;
+  border-radius:8px;
+  padding:8px;
+  flex-wrap:wrap;
+}
+
+.options-wrap.count-0 { color:#666; font-style:italic; }
+
+.options-wrap.count-1 {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.options-wrap.count-1 .option-item img {
+  width: 160px;
+  height: auto;
+  border-radius:6px;
+}
+
+.options-wrap.count-2 {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+.options-wrap.count-2 .option-item img {
+  width:100%;
+  height:auto;
+  border-radius:6px;
+}
+
+.options-wrap.count-3 {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:10px;
+}
+.options-wrap.count-3 .option-item img {
+  width:100%;
+  height:auto;
+  border-radius:6px;
+}
+
+@media (max-width:900px) {
+  .preview { grid-template-columns: 1fr; }
+}
+
+.sr-only { position:absolute !important; height:1px;width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
